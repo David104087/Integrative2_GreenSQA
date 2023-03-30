@@ -1,6 +1,6 @@
 package ui; 
 
-import java.util.Scanner; 
+import java.util.*; 
 import model.KnowledgeCapsuleSystem;
 
 public class Main{
@@ -48,6 +48,7 @@ public class Main{
             addProject();
                 break; 
             case 2:
+            endStage();
                 break; 
             case 0:
                 System.out.println("See you soon!"); 
@@ -63,6 +64,7 @@ public class Main{
         int option = 0; 
         if(reader.hasNextInt()){
             option = reader.nextInt(); 
+            reader.nextLine();
         }
         else{
             reader.nextLine();// clear the scanner 
@@ -78,63 +80,76 @@ public class Main{
         String projectName = ""; 
         String clientName = ""; 
         String clientPhone = ""; 
-        double budget = 0;     
+        String managerName = "";
+        String managerPhone = "";
+        double budget = 0;   
+        int numProjects = 0;// counter with the number fo projects, permite mostrar la informacion una vez se creo el proyecto
         final int STAGES = 6;
-        int[] stageMonths = new int[STAGES]; //name array
+        int[] stageMonths = new int[STAGES]; 
         System.out.println("                       -------------Welcome to the project management system------------");
-        System.out.println("Please provide the following information to create a new project:");        System.out.println("Enter the project name: "); 
-        projectName = reader.next(); //PREGUNTAR ESPACIO
-        System.out.println("Enter the client name: "); 
-        clientName = reader.next(); 
-        System.out.println("Enter the client phone: "); 
-        clientPhone = reader.next(); 
-        System.out.println("Enter the project budget: "); 
-        budget = reader.nextDouble(); 
-        System.out.println("How many managers will the project have?"); 
-        int managersNum = reader.nextInt();
-        String[] managerName = new String[managersNum]; //array of names
-        String[] managerPhone = new String[managersNum]; //array of phones 
-        for (int i = 0; i < managersNum; i++) {
-            System.out.println("Enter the name of the manager " + (i+1)); 
-            managerName[i] = reader.next(); 
-            System.out.println("Enter the manager's phone number" + (i+1)); 
-            managerPhone[i] = reader.next(); 
+        if (controller.getFirstValidPosition() != -1){
+            System.out.println("Please provide the following information to create a new project:");        
+            System.out.println("Enter the project name: "); 
+            projectName = reader.nextLine(); 
+            System.out.println("Enter the client name: "); 
+            clientName = reader.next(); 
+            reader.nextLine();
+            System.out.println("Enter the client phone number: "); 
+            clientPhone = reader.next(); 
+            reader.nextLine();
+            System.out.println("Enter the manager name: "); 
+            managerName = reader.next(); 
+            reader.nextLine();
+            System.out.println("Enter the manager phone number: "); 
+            managerPhone = reader.next(); 
+            System.out.println("Enter the project budget: "); 
+            budget = reader.nextDouble(); 
+            reader.nextLine();
+            System.out.println("Enter the duration in months of the start stage: "); 
+            stageMonths[0] = reader.nextInt(); 
+            reader.nextLine();
+            System.out.println("Enter the duration in months of the analysis stage: "); 
+            stageMonths[1] = reader.nextInt(); 
+            reader.nextLine();
+            System.out.println("Enter the duration in months of the design stage: "); 
+            stageMonths[2] = reader.nextInt(); 
+            reader.nextLine();
+            System.out.println("Enter the duration in months of the execution stage: "); 
+            stageMonths[3] = reader.nextInt();         
+            reader.nextLine();
+            System.out.println("Enter the duration in months of the closing and follow-up stage: "); 
+            stageMonths[4] = reader.nextInt(); 
+            reader.nextLine();
+            System.out.println("Enter the duration in months of the project control stage: "); 
+            stageMonths[5] = reader.nextInt(); 
+            reader.nextLine();
+            //call to a control contructor
+            //FALTA MANDAR LAS FECHAS
+            String msg = controller.registerProject(projectName, clientName, clientPhone, budget, managerName, managerPhone, stageMonths);
+            System.out.println("****    Project " + projectName + msg + "    ****");
+            System.out.println("------Project Details------");
+            System.out.println("Project Name: " + controller.getProject()[numProjects].getProjectName());
+            System.out.println("Client Name: " + controller.getProject()[numProjects].getClientName());
+            System.out.println("Client phone number: " + controller.getProject()[numProjects].getClientPhone());
+            System.out.println("Budget: $" + (int) controller.getProject()[numProjects].getBudget());
+            System.out.println("Name of manager: " + controller.getProject()[numProjects].getManager().getManagerName());  
+            System.out.println("manager phone number: " + controller.getProject()[numProjects].getManager().getManagerPhone()); 
+            System.out.println("Stages: "); 
+            System.out.println("INITIATION: " + controller.getProject()[numProjects].getStages()[0].getIsActive()); 
+            System.out.println("ANALISYS: " + controller.getProject()[numProjects].getStages()[1].getIsActive()); 
+            System.out.println("DESING: " + controller.getProject()[numProjects].getStages()[2].getIsActive()); 
+            System.out.println("EXECUTION: " + controller.getProject()[numProjects].getStages()[3].getIsActive()); 
+            System.out.println("CLOSE AND FOLLOW-UP: " + controller.getProject()[numProjects].getStages()[4].getIsActive()); 
+            System.out.println("PROJECT CONTROL: " + controller.getProject()[numProjects].getStages()[5].getIsActive()); 
+        } else {
+            System.out.println("Límite de proyectos alcanzado :(");
         }
-        System.out.println("Enter the duration in months of the start stage: "); 
-        stageMonths[0] = reader.nextInt(); 
-        System.out.println("Enter the duration in months of the analysis stage: "); 
-        stageMonths[1] = reader.nextInt(); 
-        System.out.println("Enter the duration in months of the design stage: "); 
-        stageMonths[2] = reader.nextInt(); 
-        System.out.println("Enter the duration in months of the execution stage: "); 
-        stageMonths[3] = reader.nextInt();         
-        System.out.println("Enter the duration in months of the closing and follow-up stage: "); 
-        stageMonths[4] = reader.nextInt(); 
-        System.out.println("Enter the duration in months of the project control stage: "); 
-        stageMonths[5] = reader.nextInt(); 
-        //call to a control operation
-        controller.registerProject(projectName, clientName, clientPhone, budget, managerName, managerPhone, stageMonths);
-        //FALTA RECIBIR EL STRING CON EL MENSAJE DE CONFIRMACION, VALIDANDO LO DE LOS 10 PROYECTOS
-        System.out.println("Project " + projectName + " has been created successfully!");
-        System.out.println("------Project Details------");
-        System.out.println("Project Name: " + controller.getProject().getProjectName());
-        System.out.println("Client Name: " + controller.getProject().getClientName());
-        System.out.println("Client phone number: " + controller.getProject().getClientPhone());
-        System.out.println("Budget: " + controller.getProject().getBudget());
-        String[] managerNames = controller.getProject().getManagerName();
-        System.out.println("Name(s) of manager(s):");        
-        for (int i = 0; i < managerNames.length; i++) {
-            System.out.println((i+1) + ". " + managerNames[i]);
-        }
-    
-        String[] managerPhones = controller.getProject().getManagerPhone();
-        System.out.println("Manager(s) phone number(s):");
-        for (int i = 0; i < managerPhones.length; i++) {
-            System.out.println((i+1) + ". " + managerPhones[i]);
-        }
+       
     }
 
-
+    public void endStage(){
+        System.out.println("Por favor ingrese el nombre del proyecto de la etapa: "); 
+    }
 
 
 

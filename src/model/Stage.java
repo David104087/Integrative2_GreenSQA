@@ -1,35 +1,39 @@
-package model; 
+package model;
+import java.util.Calendar;
 
 public class Stage {
-    public enum Status {
-        INITATION, ANALYSIS, DESING, EXCUTION, CLOSURE, CONTROL
-    }
-
-    private Status StatusActual;
+    private String stageName;
     private boolean isActive;
+    private Calendar realStartDate;
+    private Calendar realEndDate;
+    private Calendar planStartDate;
+    private Calendar planEndDate;
 
-    public Stage() {
-        StatusActual = Status.INITATION;
-        isActive = true;
+    public Stage(String stageName, boolean isActive) {
+        this.stageName = stageName;
+        this.isActive = isActive;
+        this.planStartDate = planStartDate;
+        this.planEndDate = planEndDate;
+
     }
 
-    public Status getStatusActual() {
-        return StatusActual;
+    public String getStageName() {
+        return stageName;
     }
 
-    public void setStatusActual(Status nuevoStatus) {
-        // Changes the actual Status of the Stage
-        StatusActual = nuevoStatus;
-
-        // Change the value of the "isActive" attribute
-        if (StatusActual == Status.INITATION) {
-            isActive = true;
-        } else {
-            isActive = false;
+    public String getIsActive() {
+        String msg = "Inactiva";
+        if (isActive == true) {
+            msg = "Activa";
         }
+        return msg;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public Calendar getPlanStartDate() {
+        return planStartDate;
+    }
+
+    public Calendar getPlanEndDate() {
+        return planEndDate;
     }
 }
