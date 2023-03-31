@@ -1,6 +1,5 @@
 package model;
-import java.util.Calendar;
-
+import java.util.*;
 public class Project {
 
     public static final int STAGES = 6; 
@@ -21,6 +20,8 @@ public class Project {
 		this.clientName = clientName; 
         this.clientPhone = clientPhone; 
         this.budget = budget; 
+
+
         manager =new Manager(managerName, managerPhone);
         stages = new Stage[STAGES];
         stages[0] = new Stage("START", true);
@@ -54,13 +55,22 @@ public class Project {
     public double getBudget() {
         return budget;
     }
-    
+
     public Calendar getStartDate() {
         return startDate;
     }
     
     public Calendar getEndDate() {
         return endDate;
+    }
+
+    public void setStartDate() {
+        this.startDate = Calendar.getInstance();
+    }
+    
+    public void setEndDate(int projectDuration) {
+        this.endDate = (Calendar) this.startDate.clone();
+        this.endDate.add(Calendar.MONTH, projectDuration);
     }
     
 }

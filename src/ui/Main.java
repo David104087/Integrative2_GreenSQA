@@ -1,6 +1,9 @@
 package ui; 
+import java.text.*;
+import java.util.*;
 
-import java.util.*; 
+import javax.xml.stream.events.StartDocument;
+
 import model.KnowledgeCapsuleSystem;
 
 public class Main{
@@ -48,7 +51,6 @@ public class Main{
             addProject();
                 break; 
             case 2:
-            endStage();
                 break; 
             case 0:
                 System.out.println("See you soon!"); 
@@ -105,7 +107,7 @@ public class Main{
             System.out.println("Enter the project budget: "); 
             budget = reader.nextDouble(); 
             reader.nextLine();
-            System.out.println("Enter the duration in months of the start stage: "); 
+            System.out.println("Enter the duration in months of the initiation stage: "); 
             stageMonths[0] = reader.nextInt(); 
             reader.nextLine();
             System.out.println("Enter the duration in months of the analysis stage: "); 
@@ -123,33 +125,76 @@ public class Main{
             System.out.println("Enter the duration in months of the project control stage: "); 
             stageMonths[5] = reader.nextInt(); 
             reader.nextLine();
-            //call to a control contructor
-            //FALTA MANDAR LAS FECHAS
-            String msg = controller.registerProject(projectName, clientName, clientPhone, budget, managerName, managerPhone, stageMonths);
+            int projectDuration = 0;
+            for (int i = 0; i < STAGES; i++) {
+                projectDuration += stageMonths[i]; 
+            }
+            String msg = controller.registerProject(projectName, clientName, clientPhone, budget, managerName, managerPhone, projectDuration, stageMonths);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+            
             System.out.println("****    Project " + projectName + msg + "    ****");
             System.out.println("------Project Details------");
             System.out.println("Project Name: " + controller.getProject()[numProjects].getProjectName());
+            System.out.println("Project start date: " + dateFormat.format(controller.getProject()[numProjects].getStartDate().getTime())); 
+            System.out.println("Project final planned date: " + dateFormat.format(controller.getProject()[numProjects].getEndDate().getTime()));
             System.out.println("Client Name: " + controller.getProject()[numProjects].getClientName());
             System.out.println("Client phone number: " + controller.getProject()[numProjects].getClientPhone());
             System.out.println("Budget: $" + (int) controller.getProject()[numProjects].getBudget());
             System.out.println("Name of manager: " + controller.getProject()[numProjects].getManager().getManagerName());  
             System.out.println("manager phone number: " + controller.getProject()[numProjects].getManager().getManagerPhone()); 
-            System.out.println("Stages: "); 
+            System.out.println("------Stages------ "); 
             System.out.println("INITIATION: " + controller.getProject()[numProjects].getStages()[0].getIsActive()); 
+            System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[0].getPlanStartDate().getTime()));  
+            System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[0].getPlanEndDate().getTime()));  
             System.out.println("ANALISYS: " + controller.getProject()[numProjects].getStages()[1].getIsActive()); 
+            System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[1].getPlanStartDate().getTime()));  
+            System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[1].getPlanEndDate().getTime()));  
             System.out.println("DESING: " + controller.getProject()[numProjects].getStages()[2].getIsActive()); 
+            System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[2].getPlanStartDate().getTime()));  
+            System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[2].getPlanEndDate().getTime()));  
             System.out.println("EXECUTION: " + controller.getProject()[numProjects].getStages()[3].getIsActive()); 
+            System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[3].getPlanStartDate().getTime()));  
+            System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[3].getPlanEndDate().getTime()));  
             System.out.println("CLOSE AND FOLLOW-UP: " + controller.getProject()[numProjects].getStages()[4].getIsActive()); 
+            System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[4].getPlanStartDate().getTime()));  
+            System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[4].getPlanEndDate().getTime()));  
             System.out.println("PROJECT CONTROL: " + controller.getProject()[numProjects].getStages()[5].getIsActive()); 
+            System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[5].getPlanStartDate().getTime()));  
+            System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[5].getPlanEndDate().getTime()));  
         } else {
             System.out.println("Límite de proyectos alcanzado :(");
         }
        
     }
 
-    public void endStage(){
-        System.out.println("Por favor ingrese el nombre del proyecto de la etapa: "); 
-    }
+   /* public void endStage(){
+        System.out.println("Por favor ingrese el nombre del proyecto: "); 
+        String Searchedproject = reader.nextLine();
+
+        String msg = controller.finishStage(Searchedproject); 
+        
+/*         public class System {
+            private Project[] projects;
+        
+            // Constructor y otros métodos de la clase
+        
+            public Stage findStage(String nameProject, String nameStage) {
+                for (Project project : projects) {
+                    if (project.getNameProject().equals(nameProject)) {
+                        for (Stage stage : project.getStages()) {
+                            if (stage.getNameStage().equals(nameStage)) {
+                                return stage;
+                            }
+                        }
+                    }
+                }
+                return null; // Si no se encontró ningún objeto Stage con los nombres especificados
+            }
+        }       
+        
+
+    }*/
 
 
 

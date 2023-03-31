@@ -1,13 +1,15 @@
 package model;
-import java.util.Calendar;
+import java.util.*;
+
 
 public class Stage {
     private String stageName;
     private boolean isActive;
-    private Calendar realStartDate;
-    private Calendar realEndDate;
     private Calendar planStartDate;
     private Calendar planEndDate;
+    private Calendar realStartDate;
+    private Calendar realEndDate;
+
 
     public Stage(String stageName, boolean isActive) {
         this.stageName = stageName;
@@ -36,4 +38,14 @@ public class Stage {
     public Calendar getPlanEndDate() {
         return planEndDate;
     }
+
+    public void setPlanStartDate(Calendar planStartDate){
+        this.planStartDate = planStartDate;
+    }
+
+    public void setPlanEndDate(Calendar planEndDate){
+        this.planEndDate = planEndDate;
+    }
+
+
 }
