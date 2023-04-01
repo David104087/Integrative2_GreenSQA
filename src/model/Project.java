@@ -3,7 +3,7 @@ import java.util.*;
 public class Project {
 
     public static final int STAGES = 6; 
-
+    public int posCurrentStage = 0;
 
     private String projectName; 
     private String clientName; 
@@ -13,6 +13,7 @@ public class Project {
     private double budget;  
     private Calendar startDate;
     private Calendar endDate;
+    private Stage currentStage;
 
 
     public Project(String projectName, String clientName, String clientPhone, double budget, String managerName, String managerPhone){
@@ -30,7 +31,7 @@ public class Project {
         stages[3] = new Stage("EXECUTION", false);
         stages[4] = new Stage("CLOSE AND FOLLOW-UP", false);
         stages[5] = new Stage("PROJECT CONTROL", false);
-        //FALTA CALCULAR FECHAS CON stageMonth
+        currentStage = stages[posCurrentStage];
 	}
     public String getProjectName() {
         return projectName;
@@ -63,6 +64,29 @@ public class Project {
     public Calendar getEndDate() {
         return endDate;
     }
+
+    public Stage getCurrentStage() {
+        return currentStage;
+    }
+
+    public boolean setCurrentStage() {
+        posCurrentStage++;
+        boolean statusCurrentStage = false;
+        Calendar date = Calendar.getInstance();
+        currentStage.setRealEndDate(date);//le agrega la fecha real de fin a la etapa actual
+        currentStage.setIsActive(statusCurrentStage);//desactiva la etapa actual
+        boolean statusNewStage = true;
+        try {
+            currentStage = stages[posCurrentStage];//cambia a la nueva etapa
+            currentStage.setRealStartDate(date);//le agrega la fecha de inicio real a la nueva etapa
+            currentStage.setIsActive(statusNewStage);//activa la nueva etapa 
+            return true;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+    
+
 
     public void setStartDate() {
         this.startDate = Calendar.getInstance();

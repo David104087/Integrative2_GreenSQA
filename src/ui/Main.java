@@ -10,11 +10,14 @@ public class Main{
 
     private KnowledgeCapsuleSystem controller;
     private Scanner reader;  
+    private int numProjects;// counter with the number fo projects, permite mostrar la informacion una vez se creo el proyecto
+
 
     // class constructor 
     public Main(){
         this.reader = new Scanner(System.in); 
         controller = new KnowledgeCapsuleSystem();
+        numProjects = 0;
     }
 
     public static void main(String[] args){
@@ -51,6 +54,7 @@ public class Main{
             addProject();
                 break; 
             case 2:
+            endStage();
                 break; 
             case 0:
                 System.out.println("See you soon!"); 
@@ -84,8 +88,7 @@ public class Main{
         String clientPhone = ""; 
         String managerName = "";
         String managerPhone = "";
-        double budget = 0;   
-        int numProjects = 0;// counter with the number fo projects, permite mostrar la informacion una vez se creo el proyecto
+        double budget = 0;    
         final int STAGES = 6;
         int[] stageMonths = new int[STAGES]; 
         System.out.println("                       -------------Welcome to the project management system------------");
@@ -125,8 +128,8 @@ public class Main{
             System.out.println("Enter the duration in months of the project control stage: "); 
             stageMonths[5] = reader.nextInt(); 
             reader.nextLine();
-            int projectDuration = 0;
-            for (int i = 0; i < STAGES; i++) {
+            int projectDuration = 0;//suma de todas las estapas, sirve para establecer la fecha final del proyecto
+            for (int i = 0; i < STAGES; i++) {//
                 projectDuration += stageMonths[i]; 
             }
             String msg = controller.registerProject(projectName, clientName, clientPhone, budget, managerName, managerPhone, projectDuration, stageMonths);
@@ -145,8 +148,8 @@ public class Main{
             System.out.println("manager phone number: " + controller.getProject()[numProjects].getManager().getManagerPhone()); 
             System.out.println("------Stages------ "); 
             System.out.println("INITIATION: " + controller.getProject()[numProjects].getStages()[0].getIsActive()); 
-            System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[0].getPlanStartDate().getTime()));  
-            System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[0].getPlanEndDate().getTime()));  
+            System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getCurrentStage().getPlanStartDate().getTime()));  
+            System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getCurrentStage().getPlanEndDate().getTime()));  
             System.out.println("ANALISYS: " + controller.getProject()[numProjects].getStages()[1].getIsActive()); 
             System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[1].getPlanStartDate().getTime()));  
             System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[1].getPlanEndDate().getTime()));  
@@ -162,39 +165,32 @@ public class Main{
             System.out.println("PROJECT CONTROL: " + controller.getProject()[numProjects].getStages()[5].getIsActive()); 
             System.out.println("Planned start date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[5].getPlanStartDate().getTime()));  
             System.out.println("Planned final date: " + dateFormat.format(controller.getProject()[numProjects].getStages()[5].getPlanEndDate().getTime()));  
+            numProjects++;
         } else {
             System.out.println("Límite de proyectos alcanzado :(");
         }
        
     }
 
-   /* public void endStage(){
-        System.out.println("Por favor ingrese el nombre del proyecto: "); 
-        String Searchedproject = reader.nextLine();
+    public void addCapsule() {
+        
+    }
 
-        String msg = controller.finishStage(Searchedproject); 
-        
-/*         public class System {
-            private Project[] projects;
-        
-            // Constructor y otros métodos de la clase
-        
-            public Stage findStage(String nameProject, String nameStage) {
-                for (Project project : projects) {
-                    if (project.getNameProject().equals(nameProject)) {
-                        for (Stage stage : project.getStages()) {
-                            if (stage.getNameStage().equals(nameStage)) {
-                                return stage;
-                            }
-                        }
-                    }
-                }
-                return null; // Si no se encontró ningún objeto Stage con los nombres especificados
-            }
+
+
+    public void endStage() {
+        try {
+            System.out.println("Por favor ingrese el nombre del proyecto: "); 
+            String searchedProject = reader.nextLine();
+            System.out.println("La etapa actual del proyecto es: " + controller.findProjectByName(searchedProject).getCurrentStage().getStageName()); 
+            System.out.println(controller.culminateStage(searchedProject)); 
+        } catch (NullPointerException e) {
+            System.out.println("El proyecto no existe");
         }       
+    }
+    
         
 
-    }*/
 
 
 

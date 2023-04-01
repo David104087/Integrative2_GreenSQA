@@ -20,8 +20,9 @@ public class KnowledgeCapsuleSystem {
 			projects[pos] = project; 
 			projects[pos].setStartDate();
             projects[pos].setEndDate(projectDuration);
-			Calendar startDate = projects[pos].getStartDate();
-			Stage[] stages = projects[pos].getStages();
+			Calendar startDate = projects[pos].getStartDate();//extrae la fecha de inicio del proyecto para asiganr la fechas de las etapas
+			Stage[] stages = projects[pos].getStages();//extrae las etapas del proyecto
+			stages[0].setRealStartDate(startDate);
 			for (int i = 0; i < stages.length; i++) {
 				Calendar endDate = (Calendar) startDate.clone();
 				endDate.add(Calendar.MONTH, stageMonths[i]);
@@ -34,6 +35,29 @@ public class KnowledgeCapsuleSystem {
         return msg;
 
 	}
+
+	public String culminateStage(String projectName) {
+		String msg = "El proyecto no existe";
+		if (findProjectByName(projectName) != null) {
+			boolean flag = findProjectByName(projectName).setCurrentStage();
+			if (flag = true) {
+				msg = "Etapa culminada con éxito, la nueva etapa del proyecto es: " + findProjectByName(projectName).getCurrentStage().getStageName();
+			} else {
+				msg = "El proyecto ya ha sido finalizado";
+			}
+		} 
+		return msg;
+
+	}
+
+	public Project findProjectByName(String name) {
+        for (Project project : projects) {
+            if (project != null && project.getProjectName().equals(name)) {
+                return project;
+            }
+        }
+        return null;
+    }
 
 
     /**

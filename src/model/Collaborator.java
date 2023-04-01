@@ -13,9 +13,15 @@ public class Collaborator {
         return collaboratorName;
     }
 
+    public void setCollaboratorName(String collaboratorName) {
+        this.collaboratorName = collaboratorName;
+    }
+
     public String getCollaboratorPosition() {
         return collaboratorPosition;
     }
 
-    
+    public void setCollaboratorPosition(String collaboratorPosition) {
+        this.collaboratorPosition = collaboratorPosition;
+    }
 }
