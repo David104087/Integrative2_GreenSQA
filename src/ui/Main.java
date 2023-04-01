@@ -1,8 +1,7 @@
 package ui; 
+import java.rmi.server.ServerNotActiveException;
 import java.text.*;
 import java.util.*;
-
-import javax.xml.stream.events.StartDocument;
 
 import model.KnowledgeCapsuleSystem;
 
@@ -11,6 +10,7 @@ public class Main{
     private KnowledgeCapsuleSystem controller;
     private Scanner reader;  
     private int numProjects;// counter with the number fo projects, permite mostrar la informacion una vez se creo el proyecto
+    private SimpleDateFormat dateFormat;
 
 
     // class constructor 
@@ -18,6 +18,7 @@ public class Main{
         this.reader = new Scanner(System.in); 
         controller = new KnowledgeCapsuleSystem();
         numProjects = 0;
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     }
 
     public static void main(String[] args){
@@ -55,6 +56,9 @@ public class Main{
                 break; 
             case 2:
             endStage();
+                break; 
+            case 3:
+            addCapsule();
                 break; 
             case 0:
                 System.out.println("See you soon!"); 
@@ -97,43 +101,32 @@ public class Main{
             System.out.println("Enter the project name: "); 
             projectName = reader.nextLine(); 
             System.out.println("Enter the client name: "); 
-            clientName = reader.next(); 
-            reader.nextLine();
+            clientName = reader.nextLine(); 
             System.out.println("Enter the client phone number: "); 
-            clientPhone = reader.next(); 
-            reader.nextLine();
+            clientPhone = reader.nextLine(); 
             System.out.println("Enter the manager name: "); 
-            managerName = reader.next(); 
-            reader.nextLine();
+            managerName = reader.nextLine(); 
             System.out.println("Enter the manager phone number: "); 
-            managerPhone = reader.next(); 
+            managerPhone = reader.nextLine(); 
             System.out.println("Enter the project budget: "); 
             budget = reader.nextDouble(); 
-            reader.nextLine();
-            System.out.println("Enter the duration in months of the initiation stage: "); 
+            System.out.println("Enter the duration in months of the start stage: "); 
             stageMonths[0] = reader.nextInt(); 
-            reader.nextLine();
             System.out.println("Enter the duration in months of the analysis stage: "); 
             stageMonths[1] = reader.nextInt(); 
-            reader.nextLine();
             System.out.println("Enter the duration in months of the design stage: "); 
             stageMonths[2] = reader.nextInt(); 
-            reader.nextLine();
             System.out.println("Enter the duration in months of the execution stage: "); 
             stageMonths[3] = reader.nextInt();         
-            reader.nextLine();
             System.out.println("Enter the duration in months of the closing and follow-up stage: "); 
             stageMonths[4] = reader.nextInt(); 
-            reader.nextLine();
             System.out.println("Enter the duration in months of the project control stage: "); 
             stageMonths[5] = reader.nextInt(); 
-            reader.nextLine();
             int projectDuration = 0;//suma de todas las estapas, sirve para establecer la fecha final del proyecto
             for (int i = 0; i < STAGES; i++) {//
                 projectDuration += stageMonths[i]; 
             }
             String msg = controller.registerProject(projectName, clientName, clientPhone, budget, managerName, managerPhone, projectDuration, stageMonths);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
             
             System.out.println("****    Project " + projectName + msg + "    ****");
@@ -172,21 +165,79 @@ public class Main{
        
     }
 
-    public void addCapsule() {
-        
-    }
-
-
-
     public void endStage() {
         try {
             System.out.println("Por favor ingrese el nombre del proyecto: "); 
             String searchedProject = reader.nextLine();
             System.out.println("La etapa actual del proyecto es: " + controller.findProjectByName(searchedProject).getCurrentStage().getStageName()); 
             System.out.println(controller.culminateStage(searchedProject)); 
-        } catch (NullPointerException e) {
+        } catch (NullPointerException e) {//valida si el objeto proyecto existe
             System.out.println("El proyecto no existe");
-        }       
+        }  
+    }
+
+    public void addCapsule() {
+        String collaboratorName;
+        String collaboratorPosition;
+        int capsuleType;
+        String description;
+        String learning;
+        System.out.println("                       -------------Welcome to the capsule management system------------");
+        try {
+            System.out.println("Por favor ingrese el nombre del proyecto: "); 
+            String searchedProject = reader.nextLine();
+            System.out.println("La etapa actual del proyecto es: " + controller.findProjectByName(searchedProject).getCurrentStage().getStageName()); 
+            if (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() != -1){//aqui va el first pero de las capsulas
+                System.out.println("Please provide the following information to create a new capsule in the stage:");        
+                System.out.println("Enter the collaborator name: "); 
+                collaboratorName = reader.nextLine(); 
+                System.out.println("Enter the collaborator position: "); 
+                collaboratorPosition = reader.nextLine();
+                System.out.println("Enter the capsule type: "); 
+                System.out.println("1. Técnico"); 
+                System.out.println("2. Gestión "); 
+                System.out.println("3. Dominio"); 
+                System.out.println("4. Experiencia"); 
+                capsuleType = reader.nextInt(); 
+                if (capsuleType < 1 || capsuleType > 4) {
+                    System.out.println("Please enter a valid capsule type (1-4): ");
+                    capsuleType = reader.nextInt();
+                }          
+
+                System.out.println("Enter la descripcion de la situación que desea registrar, marque entre hashtag las palabaras clave : "); 
+                reader.nextLine(); 
+                description = reader.nextLine(); 
+
+                System.out.println("Enter el aprendizaje o lección aprendida con la situación, marque entre hashtag las palabaras clave: "); 
+                learning = reader.nextLine(); 
+
+
+                String msg = controller.findProjectByName(searchedProject).getCurrentStage().createCapsule(description, capsuleType, collaboratorName, collaboratorPosition, learning);
+                System.out.println("****    Capsule " + (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 50 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps())) + msg + "    ****");
+                System.out.println("------Capsule Details------");
+                System.out.println("ID capsule(Lo necesitas para aprobar y publicar la capsula): " + controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getCapsuleID()); 
+                System.out.println("Tipo de capsula: " + controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getCapsuleType()); 
+                System.out.println("Estado: " + controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getStatus()); 
+                System.out.println("Descripción: " + controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getDescription());
+                System.out.println("Aprendizaje o lección aprendida: " + controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getLearning());     
+                System.out.println("Nombre del colaborador: " + controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getCollaborator().getCollaboratorName()); 
+                System.out.println("Posición del colabordaor: " + controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getCollaborator().getCollaboratorPosition()); 
+                System.out.println("Palabras clave: " ); 
+
+                for (int i = 0; i < controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getHashtag().size(); i++) {
+                System.out.println("- " + controller.findProjectByName(searchedProject).getCurrentStage().getCapsules()[controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 49 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps()-1)].getHashtag().get(i));
+                }
+                
+            } else {
+                System.out.println("Límite de capsulas alcanzado para esta etapa :(");
+            }
+
+
+        } catch (NullPointerException e) {//valida si el objeto proyecto existe
+            System.out.println("El proyecto no existe");
+        }  
+        
+        
     }
     
         

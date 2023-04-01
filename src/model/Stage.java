@@ -2,6 +2,7 @@ package model;
 import java.util.*;
 
 
+
 public class Stage {
 
     public static final int CAPSULES = 50; 
@@ -21,9 +22,24 @@ public class Stage {
     }
 
 
-    public String createCapsule(String capsuleID, String description, String capsuleType, String collaboratorName, String collaboratorPosition, String learning, String hashtag, String status) {
+    public String createCapsule(String description, int capsuleType, String collaboratorName, String collaboratorPosition, String learning) {
         String msg = " fue creado exitosamente!!!";
-        Capsule capsule = new Capsule(capsuleID, description, capsuleType, collaboratorName, collaboratorPosition, learning, hashtag, status);
+        String typeCapsule = "";
+        String status = "Under review";
+		if (capsuleType == 1) {
+			typeCapsule = "Técnico";
+		}
+		if (capsuleType == 2) {
+			typeCapsule = "Gestion";
+		}
+		if (capsuleType == 3) {
+			typeCapsule = "Dominio";
+		}
+        if (capsuleType == 4) {
+			typeCapsule = "Experiencia";
+		}
+
+        Capsule capsule = new Capsule(description, typeCapsule, collaboratorName, collaboratorPosition, learning, status);
         int pos = getFirstValidPositionCaps();
 		if(pos != -1){
 			capsules[pos] = capsule; 
@@ -31,6 +47,8 @@ public class Stage {
         return msg;
 
     }
+
+
 
     public Capsule[] getCapsules(){
 		return capsules;
@@ -66,6 +84,10 @@ public class Stage {
 
     public Calendar getPlanStartDate() {
         return planStartDate;
+    }
+
+    public Calendar getRealStartDate() {
+        return realStartDate;
     }
 
     public Calendar getPlanEndDate() {
