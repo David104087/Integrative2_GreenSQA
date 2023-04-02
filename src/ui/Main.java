@@ -1,5 +1,4 @@
 package ui; 
-import java.rmi.server.ServerNotActiveException;
 import java.text.*;
 import java.util.*;
 
@@ -59,6 +58,9 @@ public class Main{
                 break; 
             case 3:
             addCapsule();
+                break; 
+            case 4:
+            approveCapsule();
                 break; 
             case 0:
                 System.out.println("See you soon!"); 
@@ -237,6 +239,19 @@ public class Main{
             System.out.println("El proyecto no existe");
         }  
         
+        
+    }
+    public void approveCapsule() {
+        try {
+            System.out.println("Por favor ingrese el nombre del proyecto: "); 
+            String searchedProject = reader.nextLine();
+            System.out.println("La etapa actual del proyecto es: " + controller.findProjectByName(searchedProject).getCurrentStage().getStageName()); 
+            System.out.println("Por favor ingrese el ID de la capsula a aprobar: "); 
+            String capsuleID = reader.nextLine();
+            System.out.println(controller.passCapsule(capsuleID, searchedProject)); 
+        } catch (NullPointerException e) {//valida si el objeto proyecto existe
+            System.out.println("El proyecto no existe");
+        }  
         
     }
     

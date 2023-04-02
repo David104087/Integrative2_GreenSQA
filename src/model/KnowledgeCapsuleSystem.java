@@ -37,7 +37,7 @@ public class KnowledgeCapsuleSystem {
 	}
 
 	public String culminateStage(String projectName) {
-		String msg = "El proyecto no existe";
+		String msg = "";
 		if (findProjectByName(projectName) != null) {
 			boolean flag = findProjectByName(projectName).setCurrentStage();
 			if (flag = true) {
@@ -48,6 +48,14 @@ public class KnowledgeCapsuleSystem {
 		} 
 		return msg;
 
+	}
+
+	public String passCapsule(String capsuleID, String searchedProject) {
+		String msg = "La capsula no existe";
+		if (findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID) != null) {
+			msg = findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID).setApprovaDate();
+		} 
+		return msg;
 	}
 
 	public Project findProjectByName(String name) {

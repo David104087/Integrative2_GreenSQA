@@ -48,6 +48,15 @@ public class Stage {
 
     }
 
+    public Capsule findCapsuleByID(String capsuleID) {
+        for (Capsule capsule : capsules) {
+            if (capsule != null && capsule.getCapsuleID().equals(capsuleID)) {
+                return capsule;
+            }
+        }
+        return null;
+    }
+
 
 
     public Capsule[] getCapsules(){

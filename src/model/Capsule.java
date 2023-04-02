@@ -45,11 +45,6 @@ public class Capsule {
     }
 
 
-    // public String publishCapsule{//se debe cambiar el aytributo approvalDate, poner la url y la fecha de aaprobacion 
-
-    // }
-
-
     public String getCapsuleID() {
         return capsuleID;
     }
@@ -96,6 +91,15 @@ public class Capsule {
 
     public String getStatus() {
         return status;
+    }
+    public String setApprovaDate() {
+       String msg = "La capsula fue aprobada anteriormente";
+        if (this.status.equals("Under review")) {
+            this.approvalDate = Calendar.getInstance();
+            this.status = "approved";
+            msg = "La capsula fue aprobada con exito";
+        } 
+        return msg;
     }
 
 }
