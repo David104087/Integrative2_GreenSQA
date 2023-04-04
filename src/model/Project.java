@@ -1,9 +1,9 @@
 package model;
-import java.util.*;
+import java.util.Calendar;
 public class Project {
 
-    public static final int STAGES = 6; 
-    public int posCurrentStage = 0;
+    public static final int STAGES = 6;//number of stages
+    public int posCurrentStage = 0;//index indicating the current stage
 
     private String projectName; 
     private String clientName; 
@@ -33,6 +33,7 @@ public class Project {
         stages[5] = new Stage("PROJECT CONTROL", false);
         currentStage = stages[posCurrentStage];
 	}
+    
     public String getProjectName() {
         return projectName;
     }
@@ -69,25 +70,25 @@ public class Project {
         return currentStage;
     }
 
-    public boolean setCurrentStage() {
+    public String setCurrentStage() {
+        String msg = "";
         posCurrentStage++;
-        boolean statusCurrentStage = false;
         Calendar date = Calendar.getInstance();
-        currentStage.setRealEndDate(date);//le agrega la fecha real de fin a la etapa actual
-        currentStage.setIsActive(statusCurrentStage);//desactiva la etapa actual
-        boolean statusNewStage = true;
+        currentStage.setRealEndDate(date);//adds actual end date to the current stage
+        currentStage.setIsActive(false);//deactivates the current stage
+
         try {
-            currentStage = stages[posCurrentStage];//cambia a la nueva etapa
-            currentStage.setRealStartDate(date);//le agrega la fecha de inicio real a la nueva etapa
-            currentStage.setIsActive(statusNewStage);//activa la nueva etapa 
-            return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return false;
+            currentStage = stages[posCurrentStage];//change to new stage
+            currentStage.setRealStartDate(date);//adds the actual start date to the new stage
+            currentStage.setIsActive(true);//activates the new stage 
+            msg = "Stage successfully completed, the new project stage is: " + getCurrentStage().getStageName();
+        } catch (ArrayIndexOutOfBoundsException e) {///validates in case there is an array overflow and indicates that it is the last stage
+            msg = "The project is in its last stage";
+            return msg;
         }
+        return msg;
     }
     
-
-
     public void setStartDate() {
         this.startDate = Calendar.getInstance();
     }
@@ -96,6 +97,15 @@ public class Project {
         this.endDate = (Calendar) this.startDate.clone();
         this.endDate.add(Calendar.MONTH, projectDuration);
     }
+
+    //for the second installment of the task:
+    // public long getRemainingTime() {
+    //     Calendar currentDate = Calendar.getInstance();
+    //     long remainingTimeInMillis = endDate.getTimeInMillis() - currentDate.getTimeInMillis();
+    //     long remainingDays = TimeUnit.MILLISECONDS.toDays(remainingTimeInMillis);
+    //     return remainingDays;
+    // }
+    
     
 }
 
