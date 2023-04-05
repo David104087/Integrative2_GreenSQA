@@ -5,6 +5,12 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The Capsule class represents a Capsule object, which is a piece of content created by a collaborator.
+ * The Capsule contains a unique identifier, a description, a capsule type (technical, management, domain, or experience),
+ * a collaborator (name and position), a learning statement, a list of keywords (hashtags), a URL, a status (under review or approved),
+ * and an approval date (if the capsule is approved).
+ */
 public class Capsule {
     
     private String capsuleID;
@@ -17,6 +23,15 @@ public class Capsule {
     private String status;//under review or approved
     private Calendar approvalDate;
 
+    /**
+     * Constructs a Capsule object with the given parameters and generates a unique identifier for it.
+     * @param description a string containing the capsule's description.
+     * @param capsuleType a string containing the capsule's type (technical, management, domain, or experience).
+     * @param collaboratorName a string containing the collaborator's name.
+     * @param collaboratorPosition a string containing the collaborator's position.
+     * @param learning a string containing the capsule's learning statement.
+     * @param status a string containing the capsule's status (under review or approved).
+     */
     public Capsule(String description, String capsuleType, String collaboratorName, String collaboratorPosition, String learning, String status){
         UUID uuid = UUID.randomUUID();//generates a unique identifier
         this.capsuleID = uuid.toString();
@@ -29,89 +44,133 @@ public class Capsule {
         this.status = status;
     }   
     
+    /**
+     * Returns the URL of the capsule.
+     * @return a string containing the URL of the capsule.
+     */
     public String getURL() {
         return URL;
     }
 
+    /**
+     * Returns the capsule's learning statement.
+     * @return a string containing the capsule's learning statement.
+     */
     public String getLearning() {
         return learning;
     }
 
+    /**
+     * Returns the capsule's description.
+     * @return a string containing the capsule's description.
+     */
     public String getDescription() {
         return description;
     }
-    
+
+    /**
+     * Returns the capsule's unique identifier.
+     * @return a string containing the capsule's unique identifier.
+     */
     public String getCapsuleID() {
         return capsuleID;
     }
 
+    /**
+     * Returns the approval date of the capsule.
+     * @return a Calendar object representing the approval date of the capsule.
+     */
     public Calendar getApprovalDate() {
         return approvalDate;
     }
 
+    /**
+     * Returns the capsule's type (technical, management, domain, or experience).
+     * @return a string containing the capsule's type.
+     */
     public String getCapsuleType() {
         return capsuleType;
     }
 
+    /**
+     * Returns the capsule's collaborator (name and position).
+     * @return a Collaborator object representing the capsule's collaborator.
+     */
     public Collaborator getCollaborator() {
         return collaborator;
     }
 
+    /**
+     * Returns the list of hashtags associated with the capsule.
+     * @return an ArrayList of Strings representing the hashtags.
+     */
     public ArrayList<String> getHashtag() {
         return hashtag;
     }
 
+    /**
+     * Returns the status of the capsule.
+     * @return a String representing the current status.
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Sets the ID of the capsule.
+     * @param capsuleID a String representing the ID to be set.
+     */
     public void setCapsuleID(String capsuleID) {
         this.capsuleID = capsuleID;
     }
 
+    /**
+     * Sets the URL of the capsule.
+     * @return a String containing a message indicating the success of the operation and the URL of the capsule.
+     */
     public String setURL() {
-        StringBuilder html = new StringBuilder();
         String msg = "";
-        // Add HTML tags to create the web page
-        html.append("<html><head><title>Capsule Details</title></head><body>");
-        
-        // Add HTML tags to display Capsule attributes
-        html.append("<h1>Capsule Details</h1>");
-        html.append("<p><b>Capsule ID:</b> ").append(capsuleID).append("</p>");
-        html.append("<p><b>Description:</b> ").append(description).append("</p>");
-        html.append("<p><b>Capsule Type:</b> ").append(capsuleType).append("</p>");
-        html.append("<p><b>Collaborator:</b> ").append(collaborator.getCollaboratorName()).append(" - ").append(collaborator.getCollaboratorPosition()).append("</p>");
-        html.append("<p><b>Learning:</b> ").append(learning).append("</p>");
-        html.append("<p><b>Status:</b> ").append(status).append("</p>");
-        html.append("<p><b>Approval Date:</b> ").append(approvalDate != null ? approvalDate.getTime().toString() : "N/A").append("</p>");
-    
-        // Adds HTML tags to close the web page
-        html.append("</body></html>");
-    
-        // Converts the StringBuilder to a text string, and initializes the URL
-        this.URL = "data:text/html," + html.toString();
+        this.URL = "https://greensqa.com/en/capsule/" + getCapsuleID();
         msg = "Capsule successfully published!!!, the URL of the capsule is: " +  URL;
         return msg;
     }
     
-    
-
+    /**
+     * Sets the description of the capsule.
+     * @param description a String representing the description to be set.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Sets the type of the capsule.
+     * @param capsuleType a String representing the type to be set.
+     */
     public void setCapsuleType(String capsuleType) {
         this.capsuleType = capsuleType;
     }
 
+    /**
+     * Sets the collaborator of the capsule.
+     * @param collaborator a Collaborator object representing the collaborator to be set.
+     */
     public void setCollaborator(Collaborator collaborator) {
         this.collaborator = collaborator;
     }
 
+    /**
+     * Sets the learning of the capsule.
+     * @param learning a String representing the learning to be set.
+     */
     public void setLearning(String learning) {
         this.learning = learning;
     }
 
+    /**
+     * Sets the status of the capsule to "Approved".
+     * @return a String containing a message indicating the result of the operation.
+     */
     public String setStatus() {
         String msg = "The capsule was previously approved";
         if (this.status.equals("Under review")) {
@@ -122,11 +181,20 @@ public class Capsule {
         return msg;
     }
 
+    /**
+     * Sets the approval date of the capsule to the current date and time.
+     */
     public void setApprovalDate() {
         this.approvalDate = Calendar.getInstance();
 
     }
 
+    /**
+     * Extracts the keywords from the description and learning of the capsule.
+     * @param description a String representing the description of the capsule.
+     * @param learning a String representing the learning of the capsule.
+     * @return an ArrayList of Strings representing the keywords extracted from the description and learning.
+     */
     public static ArrayList<String> extractKeywords(String description, String learning) {
         ArrayList<String> keyWords = new ArrayList<>();
         Pattern pattern = Pattern.compile("#(.*?)#"); //the regular expression "#(.*?)#" is used, which means that it will 

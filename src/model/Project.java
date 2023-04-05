@@ -1,9 +1,22 @@
 package model;
 import java.util.Calendar;
+
+/**
+ * The Project class represents a project that has several stages and a manager.
+ * Each project has a name, a client name, a client phone number, a budget,
+ * and start and end dates.
+ */
 public class Project {
 
-    public static final int STAGES = 6;//number of stages
-    public int posCurrentStage = 0;//index indicating the current stage
+    /**
+     * This variable is the number of stages
+     */
+    public static final int STAGES = 6;
+
+    /**
+     * This variable is the index indicating the current stage
+     */
+    public int posCurrentStage = 0;
 
     private String projectName; 
     private String clientName; 
@@ -16,6 +29,16 @@ public class Project {
     private Stage currentStage;
 
 
+    /**
+     * Creates a new Project with the specified parameters.
+     * 
+     * @param projectName the name of the project
+     * @param clientName the name of the client
+     * @param clientPhone the phone number of the client
+     * @param budget the budget for the project
+     * @param managerName the name of the manager in charge of the project
+     * @param managerPhone the phone number of the manager in charge of the project
+     */
     public Project(String projectName, String clientName, String clientPhone, double budget, String managerName, String managerPhone){
 		this.projectName = projectName; 
 		this.clientName = clientName; 
@@ -34,42 +57,94 @@ public class Project {
         currentStage = stages[posCurrentStage];
 	}
     
+    /**
+     * Returns the name of the project.
+     * 
+     * @return the name of the project
+     */
     public String getProjectName() {
         return projectName;
     }
     
+    /**
+     * Returns the name of the client.
+     * 
+     * @return the name of the client
+     */
     public String getClientName() {
         return clientName;
     }
     
+    /**
+     * Returns the phone number of the client.
+     * 
+     * @return the phone number of the client
+     */
     public String getClientPhone() {
         return clientPhone;
     }
     
+    /**
+     * Returns the manager in charge of the project.
+     * 
+     * @return the manager in charge of the project
+     */
     public Manager getManager() {
         return manager;
     }
     
+    /**
+     * Returns the stages of the project.
+     * 
+     * @return the stages of the project
+     */
     public Stage[] getStages() {
         return stages;
     }
     
+    /**
+     * Returns the budget allocated for the project.
+     *
+     * @return the budget allocated for the project
+     */
     public double getBudget() {
         return budget;
     }
-
+    /**
+     * Returns the start date of the project.
+     *
+     * @return the start date of the project
+     */
     public Calendar getStartDate() {
         return startDate;
     }
-    
+
+    /**
+     * Returns the end date of the project.
+     *
+     * @return the end date of the project
+     */
     public Calendar getEndDate() {
         return endDate;
     }
 
+    /**
+     * Returns the current stage of the project.
+     *
+     * @return the current stage of the project
+     */
     public Stage getCurrentStage() {
         return currentStage;
     }
 
+    /**
+     * Sets the current stage of the project to the next stage in the sequence and
+     * updates the start and end dates of the stage accordingly.
+     *
+     * @return a message indicating the new project stage
+     * @throws ArrayIndexOutOfBoundsException if there is an array overflow and
+     * the current stage is the last stage
+     */
     public String setCurrentStage() {
         String msg = "";
         posCurrentStage++;
@@ -83,16 +158,25 @@ public class Project {
             currentStage.setIsActive(true);//activates the new stage 
             msg = "Stage successfully completed, the new project stage is: " + getCurrentStage().getStageName();
         } catch (ArrayIndexOutOfBoundsException e) {///validates in case there is an array overflow and indicates that it is the last stage
-            msg = "The project is in its last stage";
+            msg = "The project is in its last stage!!!";
             return msg;
         }
         return msg;
     }
     
+    /**
+     * Sets the start date of the project to the current date and time.
+     */
     public void setStartDate() {
         this.startDate = Calendar.getInstance();
     }
-    
+
+    /**
+     * Sets the end date of the project based on the given project duration
+     * and the start date of the project.
+     *
+     * @param projectDuration the duration of the project in months
+     */
     public void setEndDate(int projectDuration) {
         this.endDate = (Calendar) this.startDate.clone();
         this.endDate.add(Calendar.MONTH, projectDuration);

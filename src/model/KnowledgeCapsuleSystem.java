@@ -2,19 +2,43 @@ package model;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
+/**
+ * The KnowledgeCapsuleSystem class represents a system that manages a set of projects,
+ * each with their own set of stages and knowledge capsules. It provides methods for creating
+ * projects, adding stages to projects, adding knowledge capsules to stages, and more.
+ */
 public class KnowledgeCapsuleSystem {
 
-    public final int PROJECTS = 10;//number of projects
+
+    /**
+     * This variable is the number of projects
+     */
+    public final int PROJECTS = 10;
+
 	private Project[] projects;
 	private SimpleDateFormat dateFormat;
 
-    
+    /**
+	 * Constructs a new KnowledgeCapsuleSystem object with an array of Projects and a SimpleDateFormat object.
+	 */
     public KnowledgeCapsuleSystem(){
         projects = new Project[PROJECTS];
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     }
     
+	/**
+	 * Creates a new Project object and adds it to the projects array.
+	 * @param projectName the name of the project.
+	 * @param clientName the name of the client.
+	 * @param clientPhone the phone number of the client.
+	 * @param budget the budget of the project.
+	 * @param managerName the name of the project manager.
+	 * @param managerPhone the phone number of the project manager.
+	 * @param projectDuration the duration of the project in months.
+	 * @param stageMonths an array that stores the duration of each stage of the project in months.
+	 * @return a message indicating whether the project was successfully created.
+	 */
     public String createProject(String projectName, String clientName, String clientPhone, double budget, String managerName, String managerPhone, int projectDuration, int[] stageMonths){
 		
 		String msg = " was successfully created!!!";
@@ -39,6 +63,11 @@ public class KnowledgeCapsuleSystem {
 
 	}
 
+	/**
+	 * Sets the current stage of a project to the next stage.
+	 * @param projectName the name of the project
+	 * @return a message indicating if the stage was culminated successfully
+	 */
 	public String culminateStage(String projectName) {
 		String msg = "";
 		if (findProjectByName(projectName) != null) {
@@ -47,31 +76,49 @@ public class KnowledgeCapsuleSystem {
 		return msg;
 	}
 
+	/**
+	 * Updates the status of the capsule to "Approved" and sets the date of approval.
+	 * @param capsuleID the ID of the capsule to pass
+	 * @param searchedProject the name of the project to which the capsule belongs
+	 * @return a message indicating the status of the capsule after being passed and the date of approval if it was approved, or a message indicating that the capsule does not exist
+	 */
 	public String passCapsule(String capsuleID, String searchedProject) {
-		String msg = "The capsule does not exist";
+		String msg = "The capsule does not exist!!!";
 		if (findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID) != null) {
 			msg = findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID).setStatus() + ", the date of approval is: " + dateFormat.format(findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID).getApprovalDate().getTime());
 		} 
 		return msg;
 	}
 
+
+	/**
+	 * Releases a capsule by setting its URL, assuming it has been approved and not published before.
+	 * @param capsuleID the ID of the capsule to be released
+	 * @param searchedProject the name of the project where the capsule belongs
+	 * @return a message indicating if the capsule was successfully released, or if it does not exist, was not approved, or has been published before
+	 */
 	public String releaseCapsule(String capsuleID, String searchedProject) {
-		String msg = "The capsule does not exist";
+		String msg = "The capsule does not exist!!!";
 		if (findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID) != null) {
 
 			if (findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID).getStatus() == "Approved") {
 				if (findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID).getURL().isEmpty()) {
 					msg = findProjectByName(searchedProject).getCurrentStage().findCapsuleByID(capsuleID).setURL();
 				} else {
-					msg = "The capsule has been published before";				
+					msg = "The capsule has been published before!!!";				
 				}
 			} else {
-				msg = "The capsule must be approved first";
+				msg = "The capsule must be approved first!!!";
 			}
 		} 
 		return msg;
 	}
 
+	/**
+	 * Searches for a project in the array of projects by its name.
+	 * @param name the name of the project to be searched for
+	 * @return the project with the given name, or null if it is not found
+	 */
 	public Project findProjectByName(String name) {
         for (Project project : projects) {//tour the project array
             if (project != null && project.getProjectName().equals(name)) {
@@ -85,7 +132,7 @@ public class KnowledgeCapsuleSystem {
     /**
 	 * getFirstAvailableProjectIndex: search in array if exist one valid position
 	 * @return pos -1 if the position does not exist, a number in [0, 9] if exist a valid position
-	 * */
+	 */
 	public int getFirstAvailableProjectIndex(){
 		int pos = -1; 
 		boolean isFound = false; 
@@ -98,6 +145,10 @@ public class KnowledgeCapsuleSystem {
 		return pos; 
 	}
     
+	/**
+	 * Returns the array of projects.
+	 * @return an array of projects
+	 */
     public Project[] getProject(){
 		return projects;
 	}

@@ -1,11 +1,19 @@
+/**
+ * @author [David Artunduaga Penagos]
+ * @version [1.0]
+ * @since [04/04/2023]
+ */
 package ui; 
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
-
 import model.KnowledgeCapsuleSystem;
 
+/**
+ * This Main class represents the main UI class for the Knowledge Capsule System.
+ * It contains the main method and all the user interface functionalities.
+ */
 public class Main{
 
     private KnowledgeCapsuleSystem controller;
@@ -14,7 +22,10 @@ public class Main{
     private SimpleDateFormat dateFormat;
 
 
-    // class constructor 
+    /**
+     * This is the class constructor for the Main class.
+     * It initializes the scanner, controller, and date format objects, and sets the number of projects to zero.
+     */
     public Main(){
         this.reader = new Scanner(System.in); 
         controller = new KnowledgeCapsuleSystem();
@@ -22,6 +33,14 @@ public class Main{
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     }
 
+    /**
+     * This is the main method that starts the execution of the program.
+     * It creates an object of the Main class, displays the menu, and waits for user input.
+     * It executes the corresponding functionality based on the user's input until the user selects the "Exit" option.
+     * Finally, it closes the scanner object.
+     * 
+     * @param args An array of String objects representing the command-line arguments.
+     */
     public static void main(String[] args){
         Main view = new Main(); // the call to the class constructor 
 
@@ -37,6 +56,9 @@ public class Main{
         view.reader.close();
     }
 
+    /**
+     * This method displays the main menu options for the user to select.
+     */
     public void menu(){
         System.out.println("                       -------------MENU------------");
         System.out.println("0. Exit"); 
@@ -49,6 +71,11 @@ public class Main{
     }
 
 
+    /**
+     * This method executes the corresponding functionality based on the user's input.
+     * 
+     * @param option An integer representing the user's selected option.
+     */
     public void executeOption(int option){
         switch (option) {
             case 1:
@@ -76,6 +103,11 @@ public class Main{
         }
     }
 
+    /**
+     * This method validates the user's input and returns the selected option as an integer.
+     * 
+     * @return An integer representing the user's selected option.
+     */
     public int validateIntegerInput(){
         int option = 0; 
         if(reader.hasNextInt()){
@@ -90,6 +122,10 @@ public class Main{
         return option; 
     }
 
+    /**
+    * Reads user input to create a new project, and adds it to the project list in the KnowledgeCapsuleSystem class.
+     * Prints out the project details.
+     */
     public void addProject(){
         String projectName = ""; 
         String clientName = ""; 
@@ -98,7 +134,9 @@ public class Main{
         String managerPhone = "";
         double budget = -1.0;    
         final int STAGES = 6;
-        int[] stageMonths = new int[STAGES]; 
+        int[] stageMonths = new int[STAGES];   
+        String[] stageNames = {"START", "ANALYSIS", "DESING", "EXECUTION", "CLOSE AND FOLLOW-UP", "PROJECT CONTROL"};      
+
         System.out.println("                       -------------Welcome to the project management system------------");
         if (controller.getFirstAvailableProjectIndex() != -1){
             System.out.println("Please provide the following information to create a new project:");        
@@ -124,18 +162,11 @@ public class Main{
                     System.out.println("The budget must be a positive number");
                 }
             } 
-            System.out.println("Enter the duration in months of the start stage: "); 
-            stageMonths[0] = reader.nextInt(); 
-            System.out.println("Enter the duration in months of the analysis stage: "); 
-            stageMonths[1] = reader.nextInt(); 
-            System.out.println("Enter the duration in months of the design stage: "); 
-            stageMonths[2] = reader.nextInt(); 
-            System.out.println("Enter the duration in months of the execution stage: "); 
-            stageMonths[3] = reader.nextInt();         
-            System.out.println("Enter the duration in months of the closing and follow-up stage: "); 
-            stageMonths[4] = reader.nextInt(); 
-            System.out.println("Enter the duration in months of the project control stage: "); 
-            stageMonths[5] = reader.nextInt(); 
+            
+            for (int i = 0; i < STAGES; i++) {
+                System.out.println("Enter the duration in months of the " +  stageNames[i] + " stage: "); 
+                stageMonths[i] = reader.nextInt(); 
+            }
 
             int projectDuration = 0;//sum of all stages, is used to set the end date of the project.
             for (int i = 0; i < STAGES; i++) {//
@@ -154,7 +185,6 @@ public class Main{
             NumberFormat formatoDolares = NumberFormat.getCurrencyInstance(Locale.US);
             String numDollars = formatoDolares.format(controller.getProject()[numProjects].getBudget());
             System.out.println("Budget: " + numDollars);
-
             System.out.println("Name of manager: " + controller.getProject()[numProjects].getManager().getManagerName());  
             System.out.println("manager phone number: " + controller.getProject()[numProjects].getManager().getManagerPhone()); 
             System.out.println("------Stages------ "); 
@@ -183,6 +213,13 @@ public class Main{
        
     }
 
+    /**
+     * Asks the user to enter the name of a project and then culminates the current stage of that project by
+     * invoking the 'culminateStage' method of the controller object.
+     * Displays the name of the current stage of the project before culminating it. If the project object does not exist,
+     * it catches the NullPointerException thrown by the 'findProjectByName' method and displays a message to the user.
+     * @throws NullPointerException if the project object does not exist
+     */
     public void endStage() {
         try {
             System.out.println("Please enter the project name: ");            
@@ -194,6 +231,15 @@ public class Main{
         }  
     }
 
+    /**
+     * Adds a new capsule to the current stage of a project in the capsule management system.
+     * Prompts the user to enter the required information, such as the collaborator name, position, capsule type,
+     * description and learning. After validating the inputs, the method creates a new capsule and prints out the
+     * capsule's details, including its ID, type, status, description, lesson learned, collaborator name and position.
+     * If the project object does not exist,
+     * it catches the NullPointerException thrown by the 'findProjectByName' method and displays a message to the user.
+     * @throws NullPointerException if the project object does not exist
+     */
     public void addCapsule() {
         String collaboratorName;
         String collaboratorPosition;
@@ -210,24 +256,42 @@ public class Main{
                 System.out.println("Enter the collaborator name: ");
                 collaboratorName = reader.nextLine();
                 System.out.println("Enter the collaborator position: ");
-                collaboratorPosition = reader.nextLine();
+                collaboratorPosition = reader.nextLine(); 
                 System.out.println("Enter the capsule type: ");
                 System.out.println("1. Technician");
                 System.out.println("2. Management ");
                 System.out.println("3. Domain");
                 System.out.println("4. Experience");
                 capsuleType = reader.nextInt();
+                reader.nextLine();
                 if (capsuleType < 1 || capsuleType > 4) {
                     System.out.println("Please enter a valid capsule type (1-4): ");
                     capsuleType = reader.nextInt();
+                    reader.nextLine();
                 }
                 System.out.println("Enter the description of the situation you want to record, mark the keywords between hashtags(ex: #coding#): ");
-                reader. nextLine();
                 description = reader.nextLine();
-   
+
                 System.out.println("Enter the learning or lesson learned with the situation, mark the keywords between hashtags: ");
                 learning = reader.nextLine();
-   
+                do {
+                    if (hasHashtags(description) == false) {
+                        System.out.println("The description must have at least a keyword!!!");
+                        System.out.println("Enter the description of the situation you want to record, mark the keywords between hashtags(ex: #coding#): ");
+                        description = reader.nextLine();
+                    }
+                    
+                    if (hasHashtags(learning) == false) {
+                        System.out.println("The learning must have at least a keyword!!!");
+                        System.out.println("Enter the learning or lesson learned with the situation, mark the keywords between hashtags: ");
+                        learning = reader.nextLine();
+                    }
+                } while (hasHashtags(description) == false || hasHashtags(learning) == false);
+
+                if (collaboratorName.isEmpty() || collaboratorPosition.isEmpty() || description.isEmpty() || learning.isEmpty()) {
+                    System.out.println("Error: Please enter all required information");
+                    return;
+                }
    
                 String msg = controller.findProjectByName(searchedProject).getCurrentStage().createCapsule(description, capsuleType, collaboratorName, collaboratorPosition, learning);
                 System.out.println("**** Capsule " + (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps() == -1 ? 50 : (controller.findProjectByName(searchedProject).getCurrentStage().getFirstValidPositionCaps( ))) + msg + " ****");
@@ -262,6 +326,27 @@ public class Main{
        
     }
 
+    /**
+     * Checks if a given string contains at least two hashtags.
+     * @param str the string to check for hashtags
+     * @return true if the string contains at least two hashtags, false otherwise
+     */
+    public boolean hasHashtags(String str) {
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '#') {
+                count++;
+            }
+        }
+        return count >= 2;
+    }
+    
+    /**
+     * Prompts the user to enter the name of a project and the ID of a capsule to approve.
+     * If the project exists, and the capsule belongs to the project and is in a state that allows approval,
+     * the capsule is approved and a success message is printed.
+     * If the project does not exist or the capsule cannot be approved, an error message is printed.
+     */
     public void approveCapsule() {
         try {
             System.out.println("Please enter the project name: ");
@@ -275,6 +360,12 @@ public class Main{
         }
     }
 
+    /**
+     * Prompts the user to enter the name of a project and the ID of a capsule to publish.
+     * If the project exists, and the capsule belongs to the project and is in a state that allows publishing,
+     * the capsule is published and a success message is printed.
+     * If the project does not exist or the capsule cannot be published, an error message is printed.
+     */
     public void publishCapsule() {
         try {
             System.out.println("Please enter the project name: ");
@@ -287,7 +378,5 @@ public class Main{
         } catch (NullPointerException e) { // check if the project object exists
             System.out.println("The project does not exist");
         }
-    }
-    
-        
+    }       
 }
