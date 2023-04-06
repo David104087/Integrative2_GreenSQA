@@ -157,7 +157,7 @@ public class Project {
             currentStage.setRealStartDate(date);//adds the actual start date to the new stage
             currentStage.setIsActive(true);//activates the new stage 
             msg = "Stage successfully completed, the new project stage is: " + getCurrentStage().getStageName();
-        } catch (ArrayIndexOutOfBoundsException e) {///validates in case there is an array overflow and indicates that it is the last stage
+        } catch (ArrayIndexOutOfBoundsException e) {//validates in case there is an array overflow and indicates that it is the last stage
             msg = "The project is in its last stage!!!";
             return msg;
         }
