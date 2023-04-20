@@ -8,7 +8,6 @@ import java.util.Calendar;
  */
 public class Stage {
 
-
     /**
      * This variable is the number of capsules
      */
@@ -161,6 +160,7 @@ public class Stage {
 		if(pos != -1){
 			capsules[pos] = capsule; 
 		} 
+
         return msg;
     }
 

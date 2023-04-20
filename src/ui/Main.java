@@ -93,6 +93,9 @@ public class Main{
             case 5:
             publishCapsule();
                 break; 
+            case 6:
+            collaboratorCapsules();
+                break;
             case 0:
                 System.out.println("See you soon!"); 
                 break;
@@ -378,5 +381,19 @@ public class Main{
         } catch (NullPointerException e) { // check if the project object exists
             System.out.println("The project does not exist");
         }
-    }       
+    }   
+    
+    public void collaboratorCapsules() {
+        System.out.println("Please enter the collaborator name: ");
+        String nameCollaborator = reader.nextLine();
+        String capsules = controller.searchColaboratorCapsules(nameCollaborator);
+        if (!capsules.isEmpty()) {
+            System.out.println("Capsules found for collaborator " + nameCollaborator + ":");
+            System.out.println("------------------------");
+            System.out.println(capsules);
+            System.out.println("------------------------");
+        } else {
+            System.out.println("No capsules found for collaborator " + nameCollaborator);
+        }
+    }  
 }

@@ -2,6 +2,7 @@ package model;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
+
 /**
  * The KnowledgeCapsuleSystem class represents a system that manages a set of projects,
  * each with their own set of stages and knowledge capsules. It provides methods for creating
@@ -14,6 +15,7 @@ public class KnowledgeCapsuleSystem {
      * This variable is the number of projects
      */
     public final int PROJECTS = 10;
+
 
 	private Project[] projects;
 	private SimpleDateFormat dateFormat;
@@ -144,7 +146,28 @@ public class KnowledgeCapsuleSystem {
 		}
 		return pos; 
 	}
-    
+
+	public String searchColaboratorCapsules(String nombreColaborador) {
+		String msg = "";
+		for (Project project : projects) {
+			if (project != null) {
+				for (Stage stage : project.getStages()) {
+					if(project.getStages() != null) {
+						for (Capsule capsule : stage.getCapsules()) {
+							if (capsule != null) {
+								Collaborator collaborator = capsule.getCollaborator();
+								if (collaborator.getCollaboratorName().equals(nombreColaborador)) {
+									msg += "- ID: " + capsule.getCapsuleID() + "\n";
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return msg;
+	}
+	
 	/**
 	 * Returns the array of projects.
 	 * @return an array of projects
@@ -152,4 +175,6 @@ public class KnowledgeCapsuleSystem {
     public Project[] getProject(){
 		return projects;
 	}
+
+	
 }

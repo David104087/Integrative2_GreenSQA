@@ -182,6 +182,7 @@ public class Project {
         this.endDate.add(Calendar.MONTH, projectDuration);
     }
 
+
     //for the second installment of the task:
     // public long getRemainingTime() {
     //     Calendar currentDate = Calendar.getInstance();
