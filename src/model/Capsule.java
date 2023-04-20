@@ -18,7 +18,7 @@ public class Capsule {
     private String capsuleType;
     private Collaborator collaborator;
     private String learning;
-    private ArrayList<String> hashtag;
+    private ArrayList<String> hashtags;
     private String URL;
     private String status;//under review or approved
     private Calendar approvalDate;
@@ -39,7 +39,7 @@ public class Capsule {
         this.capsuleType = capsuleType;
         this.collaborator = new Collaborator(collaboratorName, collaboratorPosition);
         this.learning = learning;
-        this.hashtag = extractKeywords(description, learning);
+        this.hashtags = extractKeywords(description, learning);
         this.URL = "";
         this.status = status;
     }   
@@ -105,7 +105,7 @@ public class Capsule {
      * @return an ArrayList of Strings representing the hashtags.
      */
     public ArrayList<String> getHashtag() {
-        return hashtag;
+        return hashtags;
     }
 
     /**
@@ -195,23 +195,23 @@ public class Capsule {
      * @param learning a String representing the learning of the capsule.
      * @return an ArrayList of Strings representing the keywords extracted from the description and learning.
      */
-    public static ArrayList<String> extractKeywords(String description, String learning) {
-        ArrayList<String> keyWords = new ArrayList<>();
+    public ArrayList<String> extractKeywords(String description, String learning) {
+        hashtags = new ArrayList<>();
         Pattern pattern = Pattern.compile("#(.*?)#"); //the regular expression "#(.*?)#" is used, which means that it will 
         //will look for any string that starts with "#" and ends with "#", and that contains any number of characters between 
         //the two "#" symbols.
     
         Matcher matcher = pattern.matcher(description);
         while (matcher.find()) {
-            keyWords.add(matcher.group(1)); //add keyword found
+            hashtags.add(matcher.group(1)); //add keyword found
         }
     
         matcher = pattern.matcher(learning);
         while (matcher.find()) {
-            keyWords.add(matcher.group(1)); // add keyword found
+            hashtags.add(matcher.group(1)); // add keyword found
         }
     
-        return keyWords;
+        return hashtags;
     }
 
 }

@@ -96,6 +96,9 @@ public class Main{
             case 6:
             collaboratorCapsules();
                 break;
+            case 7:
+            consultLearns();
+                break;
             case 0:
                 System.out.println("See you soon!"); 
                 break;
@@ -396,4 +399,20 @@ public class Main{
             System.out.println("No capsules found for collaborator " + nameCollaborator);
         }
     }  
+
+    public void consultLearns() {
+        System.out.println("Enter the capsule keyword to learn about the learnings:");
+        String keyWord = reader.nextLine();
+
+        String learns = controller.searchLearns(keyWord);
+        if (!learns.isEmpty()) {
+            System.out.println("Learnings capsules:  ");
+            System.out.println("------------------------");
+            System.out.println(learns);
+            System.out.println("------------------------");
+        } else {
+            System.out.println("No learns founds");
+        }
+    
+    }
 }

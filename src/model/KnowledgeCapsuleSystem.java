@@ -1,6 +1,8 @@
 package model;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 
 
 /**
@@ -147,6 +149,11 @@ public class KnowledgeCapsuleSystem {
 		return pos; 
 	}
 
+	/**
+	 * 	Searches for capsules that have a collaborator with a given name.
+	 * @param nombreColaborador The name of the collaborator to search for.
+	 * @return A String containing the IDs of the capsules that have the collaborator
+	*/
 	public String searchColaboratorCapsules(String nombreColaborador) {
 		String msg = "";
 		for (Project project : projects) {
@@ -167,6 +174,31 @@ public class KnowledgeCapsuleSystem {
 		}
 		return msg;
 	}
+
+	public String searchLearns(String Keyword) {
+		String msg = "";
+		for (Project project : projects) {
+			if (project != null) {
+				for (Stage stage : project.getStages()) {
+					if(project.getStages() != null) {
+						for (Capsule capsule : stage.getCapsules()) {
+							if (capsule != null) {
+								ArrayList<String> hashtags = capsule.getHashtag();
+
+								boolean isFound = hashtags.contains(Keyword);
+								String status = capsule.getStatus();
+
+								if (isFound == true && status.equals("Approved") ) {
+									msg += "- ID: " + capsule.getCapsuleID() + "\n" + "Learning: " + capsule.getLearning() + "\n";
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return msg; 
+    }
 	
 	/**
 	 * Returns the array of projects.
