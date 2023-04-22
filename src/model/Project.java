@@ -1,5 +1,9 @@
 package model;
 import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 
 /**
  * The Project class represents a project that has several stages and a manager.
@@ -17,6 +21,9 @@ public class Project {
      * This variable is the index indicating the current stage
      */
     public int posCurrentStage = 0;
+
+    private SimpleDateFormat dateFormat;
+
 
     private String projectName; 
     private String clientName; 
@@ -43,9 +50,7 @@ public class Project {
 		this.projectName = projectName; 
 		this.clientName = clientName; 
         this.clientPhone = clientPhone; 
-        this.budget = budget; 
-
-
+        this.budget = budget;
         manager =new Manager(managerName, managerPhone);
         stages = new Stage[STAGES];
         stages[0] = new Stage("START", true);
@@ -55,6 +60,9 @@ public class Project {
         stages[4] = new Stage("CLOSE AND FOLLOW-UP", false);
         stages[5] = new Stage("PROJECT CONTROL", false);
         currentStage = stages[posCurrentStage];
+
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
 	}
     
     /**
@@ -182,15 +190,46 @@ public class Project {
         this.endDate.add(Calendar.MONTH, projectDuration);
     }
 
-
-    //for the second installment of the task:
-    // public long getRemainingTime() {
-    //     Calendar currentDate = Calendar.getInstance();
-    //     long remainingTimeInMillis = endDate.getTimeInMillis() - currentDate.getTimeInMillis();
-    //     long remainingDays = TimeUnit.MILLISECONDS.toDays(remainingTimeInMillis);
-    //     return remainingDays;
-    // }
-    
+    /**
+     * This function returns a formatted string representation of a project object, including details such
+     * as project name, start and end dates, client and manager information, budget, and stages with their
+     * planned start and end dates.
+     * 
+     * @return A string representation of a project object, including its name, start and end dates, client
+     * and manager information, budget, and information about each stage of the project.
+     */
+    @Override
+    public String toString() {
+        NumberFormat formatoDolares = NumberFormat.getCurrencyInstance(Locale.US);
+        String numDollars = formatoDolares.format(budget);
+        return "ProjectName: " + projectName + "\n"
+                + "Start date: " + dateFormat.format(startDate.getTime()) + "\n"
+                + "End Date: " + dateFormat.format(endDate.getTime()) + "\n"
+                + "Client name: " + clientName + "\n"
+                + "Client phone: " + clientPhone + "\n"
+                + "Manager name: " + manager.getManagerName() + "\n"
+                + "Manager phone: " + manager.getManagerPhone() + "\n"
+                + "Budget: " + numDollars + "\n"
+                + "----------Stages----------" + "\n"
+                + "START: " + stages[0].getIsActive() + "\n"
+                + "Planned start date: " + dateFormat.format(currentStage.getPlanStartDate().getTime()) + "\n"
+                + "Planned end date: " + dateFormat.format(currentStage.getPlanEndDate().getTime()) + "\n"
+                + "ANALISYS: " + stages[1].getIsActive() + "\n"
+                + "Planned start date: " + dateFormat.format(stages[1].getPlanStartDate().getTime()) + "\n"
+                + "Planned end date: " + dateFormat.format(stages[1].getPlanEndDate().getTime()) + "\n"
+                + "DESING: " + stages[2].getIsActive() + "\n"
+                + "Planned start date: " + dateFormat.format(stages[2].getPlanStartDate().getTime()) + "\n"
+                + "Planned end date: " + dateFormat.format(stages[2].getPlanEndDate().getTime()) + "\n"
+                + "EXECUTION: " + stages[3].getIsActive() + "\n"
+                + "Planned start date: " + dateFormat.format(stages[3].getPlanStartDate().getTime()) + "\n"
+                + "Planned end date: " + dateFormat.format(stages[3].getPlanEndDate().getTime()) + "\n"
+                + "CLOSE AND FOLLOW-UP: "  + stages[4].getIsActive() + "\n"
+                + "Planned start date: " + dateFormat.format(stages[4].getPlanStartDate().getTime()) + "\n"
+                + "Planned end date: " + dateFormat.format(stages[4].getPlanEndDate().getTime()) + "\n"
+                + "PROJECT CONTROL: "  + stages[5].getIsActive() + "\n"
+                + "Planned start date: " + dateFormat.format(stages[5].getPlanStartDate().getTime()) + "\n"
+                + "Planned end date: " + dateFormat.format(stages[5].getPlanEndDate().getTime()) + "\n";
+    }
     
 }
 

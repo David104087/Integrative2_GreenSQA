@@ -214,4 +214,24 @@ public class Capsule {
         return hashtags;
     }
 
+    /**
+     * This function returns a string representation of an object with various properties including capsule
+     * ID, type, status, learnings, description, and collaborator information.
+     * 
+     * @return A string representation of an object, which includes the capsule ID, capsule type, status,
+     * learnings, description, collaborator name, and collaborator position.
+     */
+    @Override
+    public String toString() {
+        return  "ID: " + capsuleID + "\n"
+                + "Capsule Type: " + capsuleType + "\n"
+                + "Status: " + status + "\n"
+                + "Learnings: " + learning + "\n"
+                + "Description: " + description + "\n"
+                + "Collaborator name: " + collaborator.getCollaboratorName() + "\n"
+                + "Collaborator Position: " + collaborator.getCollaboratorPosition() + "\n";
+    }
+    
+
+    
 }

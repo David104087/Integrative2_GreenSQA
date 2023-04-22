@@ -7,7 +7,6 @@ import java.util.Calendar;
  * start and end dates, and the capsules related to the stage.
  */
 public class Stage {
-
     /**
      * This variable is the number of capsules
      */

@@ -1,7 +1,7 @@
 package model;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 
 
 
@@ -150,6 +150,98 @@ public class KnowledgeCapsuleSystem {
 	}
 
 	/**
+	 * This function returns the name(s) of the project(s) with the highest number of capsules by iterating
+	 * through all projects, stages, and capsules.
+	 * 
+	 * @return a string containing the names of the project(s) with the maximum number
+	 * of capsules.
+	 */
+	public String projectMaxCapsules() {
+		StringBuilder names = new StringBuilder();
+		int maxCapsules = 0;
+	
+		for (Project project : projects) {
+			if (project != null) {
+				int capsulesInProject = 0;
+	
+				for (Stage stage : project.getStages()) {
+					if (stage != null) {
+	
+						for (Capsule capsule : stage.getCapsules()) {
+							if (capsule != null) {
+								capsulesInProject++;
+							}
+						}
+					}
+				}
+	
+				if (capsulesInProject > maxCapsules) {
+					maxCapsules = capsulesInProject;
+					names = new StringBuilder(project.getProjectName());
+				}
+				else if (capsulesInProject == maxCapsules) {
+					names.append(", ").append(project.getProjectName());
+				}
+			}
+		}
+	
+		return names.toString();
+	}
+	
+	
+
+	/**
+	 * The function returns a string containing a list of learnings for a specific stage in a project.
+	 * 
+	 * @param projectName a String representing the name of a project
+	 * @param stageName An integer representing the stage of the project.
+	 * @return The method is returning a String message that lists the learnings for a specific stage of a
+	 * project. The message includes the stage name, capsule ID, and learning description for each capsule
+	 * in the specified stage.
+	 */
+	public String listLearnings(String projectName, int stageName) {
+		String msg = "";
+		String nameStage = "";
+
+		if (stageName == 1) {
+			nameStage = "START";
+		}
+		if (stageName == 2) {
+			nameStage = "ANALYSIS";
+		}	
+		if (stageName == 3) {
+			nameStage = "DESING";
+		}
+		if (stageName == 4) {
+			nameStage = "EXECUTION";
+		}
+		if (stageName == 5) {
+			nameStage = "CLOSE AND FOLLOW-UP";
+		}		
+		if (stageName == 6) {
+			nameStage = "PROJECT CONTROL";
+		}
+
+		Project project = findProjectByName(projectName);
+		if (project != null) {
+			for (Stage stage : project.getStages()) {
+				if (stage.getStageName().equals(nameStage)) {
+					for (Capsule capsule : stage.getCapsules()) {
+						if (capsule != null) {
+							msg += "Stage: " + nameStage + "\n" + "- ID: " + capsule.getCapsuleID() + "\n" + "Learning: " + capsule.getLearning() + "\n";
+						}
+						
+					}
+				}
+				
+			}
+
+		}
+
+		return msg;
+	}
+
+	/**
 	 * 	Searches for capsules that have a collaborator with a given name.
 	 * @param nombreColaborador The name of the collaborator to search for.
 	 * @return A String containing the IDs of the capsules that have the collaborator
@@ -175,6 +267,15 @@ public class KnowledgeCapsuleSystem {
 		return msg;
 	}
 
+
+	
+	/**
+	 * The function searches for capsules published or approved in projects 
+	 * and stages that contain a specific keyword
+	 * 
+	 * @param Keyword The keyword that is being searched for in the capsules' hashtags.
+	 * @return a String message that contains the ID and learning information
+	 */
 	public String searchLearns(String Keyword) {
 		String msg = "";
 		for (Project project : projects) {
@@ -183,12 +284,10 @@ public class KnowledgeCapsuleSystem {
 					if(project.getStages() != null) {
 						for (Capsule capsule : stage.getCapsules()) {
 							if (capsule != null) {
-								ArrayList<String> hashtags = capsule.getHashtag();
-
-								boolean isFound = hashtags.contains(Keyword);
+								boolean isFound = capsule.getHashtag().contains(Keyword);
+								String URL = capsule.getURL(); 
 								String status = capsule.getStatus();
-
-								if (isFound == true && status.equals("Approved") ) {
+								if (isFound == true && (status.equals("Approved") || !URL.isEmpty()) ) {
 									msg += "- ID: " + capsule.getCapsuleID() + "\n" + "Learning: " + capsule.getLearning() + "\n";
 								}
 							}
